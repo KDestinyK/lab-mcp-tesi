@@ -1,0 +1,36 @@
+services:
+  target:
+    build:
+      context: .
+      args:
+        MCP_VERSION: ${MCP_VERSION:?manca MCP_VERSION}
+    image: lab-sdk-dns-rebinding:${MCP_VERSION}
+    pull_policy: build
+    networks: [lab]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; socket.create_connection(('127.0.0.1', 8000), 2)"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  cattura:
+    image: nicolaka/netshoot:v0.13
+    network_mode: "service:target"
+    cap_add: [NET_ADMIN, NET_RAW]
+    command: ["sh", "-c", "exec tcpdump -i ${CATTURA_INTERFACCIA:-lo} -U -w /captures/traffico-$$(date -u +%Y%m%dT%H%M%SZ).pcap"]
+    volumes:
+      - type: bind  # sintassi estesa per i percorsi Windows (C:/...)
+        source: ${CAPTURE_DIR:-./pcap}
+        target: /captures
+    depends_on:
+      target:
+        condition: service_healthy
+
+  client:
+    image: curlimages/curl:8.11.1
+    network_mode: "service:target"
+    profiles: [sonda]
+
+networks:
+  lab:
+    internal: true

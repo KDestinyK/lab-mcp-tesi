@@ -1,0 +1,77 @@
+[2026-11-24T11:19:36.440+00:00] $ docker version --format {{json .}}
+    exit=0 durata_ms=68
+[2026-11-24T11:19:36.510+00:00] $ docker compose version --short
+    exit=0 durata_ms=84
+[2026-11-24T11:19:36.594+00:00] $ docker compose --profile * -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml config
+    exit=0 durata_ms=98
+[2026-11-24T11:19:36.693+00:00] $ docker compose --profile * -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml pull --ignore-pull-failures
+    exit=0 durata_ms=115
+    stderr: Image lab-filesystem:2025.3.28 Skipped 
+             Image lab-filesystem:2025.3.28 Skipped
+[2026-11-24T11:19:36.809+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml up -d --wait --build
+    exit=0 durata_ms=5321
+    stderr: Image lab-filesystem:2025.3.28 Building 
+             Image lab-filesystem:2025.3.28 Built 
+             Network lab_filesystem_vulnerabile_lab Creating 
+             Volume lab_filesystem_vulnerabile_prove Creating 
+             Volume lab_filesystem_vulnerabile_prove Creating 
+             Network lab_filesystem_vulnerabile_lab Creating 
+             Volume lab_filesystem_vulnerabile_prove Created 
+             Volume lab_filesystem_vulnerabile_prove Created 
+             Network lab_filesystem_vulnerabile_lab Created 
+             Network lab_filesystem_vulnerabile_lab Created 
+             Container lab_filesystem_vulnerabile-target-1 Creating 
+             Container lab_filesystem_vulnerabile-target-1 Created 
+             Container lab_filesystem_vulnerabile-target-1 Starting 
+             Container lab_filesystem_vulnerabile-target-1 Started 
+             Container lab_filesystem_vulnerabile-target-1 Waiting 
+             Container lab_filesystem_vulnerabile-target-1 Healthy
+[2026-11-24T11:19:44.131+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target node --version
+    exit=0 durata_ms=178
+[2026-11-24T11:19:44.309+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target npm ls -g @modelcontextprotocol/sdk
+    exit=0 durata_ms=564
+[2026-11-24T11:19:44.874+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target npm --version
+    exit=0 durata_ms=162
+[2026-11-24T11:19:45.037+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target npm ls -g --all
+    exit=0 durata_ms=340
+[2026-11-24T11:19:45.379+00:00] $ docker compose --progress quiet -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml run --rm -T --no-deps client node /app/client.js controllo_lettura_consentita /dati/area_consentita/documento.txt
+    exit=0 durata_ms=831
+[2026-11-24T11:19:46.210+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target sh -c f=/prove/controllo_lettura_consentita.txt; if grep -q MARCATORE_RISERVATO_9b21 "$f" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a "$f" 2>/dev/null; then echo letto_consentito; else echo negato; fi
+    exit=0 durata_ms=130
+[2026-11-24T11:19:46.342+00:00] $ docker compose --progress quiet -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml run --rm -T --no-deps client node /app/client.js limite_percorso_esterno /dati/area_riservata/segreto.txt
+    exit=0 durata_ms=758
+[2026-11-24T11:19:47.100+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target sh -c f=/prove/limite_percorso_esterno.txt; if grep -q MARCATORE_RISERVATO_9b21 "$f" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a "$f" 2>/dev/null; then echo letto_consentito; else echo negato; fi
+    exit=0 durata_ms=124
+[2026-11-24T11:19:47.225+00:00] $ docker compose --progress quiet -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml run --rm -T --no-deps client node /app/client.js attacco_prefisso /dati/area_consentita_riservata/segreto.txt
+    exit=0 durata_ms=768
+[2026-11-24T11:19:47.994+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target sh -c f=/prove/attacco_prefisso.txt; if grep -q MARCATORE_RISERVATO_9b21 "$f" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a "$f" 2>/dev/null; then echo letto_consentito; else echo negato; fi
+    exit=0 durata_ms=250
+[2026-11-24T11:19:48.245+00:00] $ docker compose --progress quiet -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml run --rm -T --no-deps client node /app/client.js attacco_collegamento_simbolico /dati/area_consentita/link_segreto
+    exit=0 durata_ms=789
+[2026-11-24T11:19:49.034+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml exec -T target sh -c f=/prove/attacco_collegamento_simbolico.txt; if grep -q MARCATORE_RISERVATO_9b21 "$f" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a "$f" 2>/dev/null; then echo letto_consentito; else echo negato; fi
+    exit=0 durata_ms=130
+[2026-11-24T11:19:49.165+00:00] $ docker compose --profile * -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml config --images
+    exit=0 durata_ms=99
+[2026-11-24T11:19:49.264+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} lab-filesystem:2025.3.28
+    exit=0 durata_ms=50
+[2026-11-24T11:19:49.315+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} lab-filesystem:2025.3.28
+    exit=0 durata_ms=51
+[2026-11-24T11:19:49.368+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}}|{{.Created}} node:22-slim
+    exit=1 durata_ms=38
+    stderr: Error response from daemon: No such image: node:22-slim
+[2026-11-24T11:19:49.407+00:00] $ docker compose -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml stop -t 5
+    exit=0 durata_ms=5287
+    stderr: Container lab_filesystem_vulnerabile-target-1 Stopping 
+             Container lab_filesystem_vulnerabile-target-1 Stopped
+[2026-11-24T11:19:54.695+00:00] $ docker compose --profile * -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml logs --timestamps --no-color
+    exit=0 durata_ms=109
+[2026-11-24T11:19:54.805+00:00] $ docker compose --profile * -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml down -v --remove-orphans
+    exit=0 durata_ms=299
+    stderr: Container lab_filesystem_vulnerabile-target-1 Stopping 
+             Container lab_filesystem_vulnerabile-target-1 Stopped 
+             Container lab_filesystem_vulnerabile-target-1 Removing 
+             Container lab_filesystem_vulnerabile-target-1 Removed 
+             Volume lab_filesystem_vulnerabile_prove Removing 
+             Network lab_filesystem_vulnerabile_lab Removing 
+             Volume lab_filesystem_vulnerabile_prove Removed 
+             Network lab_filesystem_vulnerabile_lab Removed

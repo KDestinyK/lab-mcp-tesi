@@ -1,0 +1,14 @@
+{
+  "nicolaka/netshoot:v0.13": {
+    "repo_digests": [
+      "nicolaka/netshoot@sha256:a20c2531bf35436ed3766cd6cfe89d352b050ccc4d7005ce6400adf97503da1b"
+    ],
+    "id": "sha256:a20c2531bf35436ed3766cd6cfe89d352b050ccc4d7005ce6400adf97503da1b"
+  },
+  "lab-mcp-inspector:0.14.0": {
+    "repo_digests": [
+      "lab-mcp-inspector@sha256:7a616d48d0aa3fff1e0dcaafb411c8ddd94765f75238359af21cbff86e866cba"
+    ],
+    "id": "sha256:7a616d48d0aa3fff1e0dcaafb411c8ddd94765f75238359af21cbff86e866cba"
+  }
+}

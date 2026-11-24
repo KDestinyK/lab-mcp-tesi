@@ -1,0 +1,263 @@
+{
+  "descrizione": "Protezione dal DNS rebinding nell'SDK Python mcp (CVE-2025-66416): versione 1.22.0 contro 1.23.0, con un server FastMCP su Streamable HTTP in ascolto su 127.0.0.1:8000. Le richieste arrivano dalla stessa macchina con gli header Host e Origin del dominio dell'attaccante, separati o insieme. Il tool chiamato crea un file con il nome del caso, e l'esito dipende dalla presenza di quel file.",
+  "configurazioni": {
+    "vulnerabile": {
+      "file": "compose.yml",
+      "env": {
+        "MCP_VERSION": "1.22.0",
+        "CATTURA_INTERFACCIA": "lo"
+      }
+    },
+    "corretta": {
+      "file": "compose.yml",
+      "env": {
+        "MCP_VERSION": "1.23.0",
+        "CATTURA_INTERFACCIA": "lo"
+      }
+    }
+  },
+  "servizio_client": "client",
+  "esiti": {
+    "eseguito": "accettata",
+    "non_eseguito": "respinta"
+  },
+  "riavvia_tra_casi": false,
+  "attesa_secondi": 2,
+  "comandi_versioni": [
+    {
+      "servizio": "target",
+      "comando": [
+        "python",
+        "--version"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "pip",
+        "show",
+        "mcp"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "pip",
+        "freeze",
+        "--all"
+      ]
+    }
+  ],
+  "casi": [
+    {
+      "id": "controllo_host_locale",
+      "tipo": "controllo",
+      "descrizione": "Client locale: Host 127.0.0.1:8000, nessuna Origin.",
+      "comando": [
+        "-sS",
+        "-i",
+        "-v",
+        "-X",
+        "POST",
+        "http://127.0.0.1:8000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-H",
+        "Accept: application/json, text/event-stream",
+        "-d",
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"registra_esecuzione\",\"arguments\":{\"caso\":\"{caso}\"}}}",
+        "-w",
+        "\n%{http_code}\n"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "python",
+          "/app/verifica.py",
+          "{caso}"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "accettata"
+      }
+    },
+    {
+      "id": "controllo_origin_locale",
+      "tipo": "controllo",
+      "descrizione": "Origin http://localhost:8000 (pagina servita in locale).",
+      "comando": [
+        "-sS",
+        "-i",
+        "-v",
+        "-X",
+        "POST",
+        "http://127.0.0.1:8000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-H",
+        "Accept: application/json, text/event-stream",
+        "-H",
+        "Origin: http://localhost:8000",
+        "-d",
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"registra_esecuzione\",\"arguments\":{\"caso\":\"{caso}\"}}}",
+        "-w",
+        "\n%{http_code}\n"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "python",
+          "/app/verifica.py",
+          "{caso}"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "accettata"
+      }
+    },
+    {
+      "id": "host_esterno",
+      "tipo": "attacco",
+      "descrizione": "Host del dominio dell'attaccante. Atteso con la 1.23.0: 421, tool non eseguito.",
+      "comando": [
+        "-sS",
+        "-i",
+        "-v",
+        "-X",
+        "POST",
+        "http://127.0.0.1:8000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-H",
+        "Accept: application/json, text/event-stream",
+        "-H",
+        "Host: attaccante.example:8000",
+        "-d",
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"registra_esecuzione\",\"arguments\":{\"caso\":\"{caso}\"}}}",
+        "-w",
+        "\n%{http_code}\n"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "python",
+          "/app/verifica.py",
+          "{caso}"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "respinta"
+      }
+    },
+    {
+      "id": "origin_esterna",
+      "tipo": "attacco",
+      "descrizione": "Origin del dominio dell'attaccante. Atteso con la 1.23.0: 403, tool non eseguito.",
+      "comando": [
+        "-sS",
+        "-i",
+        "-v",
+        "-X",
+        "POST",
+        "http://127.0.0.1:8000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-H",
+        "Accept: application/json, text/event-stream",
+        "-H",
+        "Origin: http://attaccante.example",
+        "-d",
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"registra_esecuzione\",\"arguments\":{\"caso\":\"{caso}\"}}}",
+        "-w",
+        "\n%{http_code}\n"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "python",
+          "/app/verifica.py",
+          "{caso}"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "respinta"
+      }
+    },
+    {
+      "id": "host_e_origin_esterni",
+      "tipo": "attacco",
+      "descrizione": "Host e Origin del dominio dell'attaccante insieme, come nella richiesta del browser dopo il rebinding. Atteso con la 1.23.0: 421 (l'Host è controllato per primo), tool non eseguito.",
+      "comando": [
+        "-sS",
+        "-i",
+        "-v",
+        "-X",
+        "POST",
+        "http://127.0.0.1:8000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-H",
+        "Accept: application/json, text/event-stream",
+        "-H",
+        "Host: attaccante.example:8000",
+        "-H",
+        "Origin: http://attaccante.example:8000",
+        "-d",
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"registra_esecuzione\",\"arguments\":{\"caso\":\"{caso}\"}}}",
+        "-w",
+        "\n%{http_code}\n"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "python",
+          "/app/verifica.py",
+          "{caso}"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "respinta"
+      }
+    },
+    {
+      "id": "origin_null",
+      "tipo": "limite",
+      "descrizione": "Origin 'null' (iframe in sandbox, file locali), non tra quelle ammesse dalla 1.23.0.",
+      "comando": [
+        "-sS",
+        "-i",
+        "-v",
+        "-X",
+        "POST",
+        "http://127.0.0.1:8000/mcp",
+        "-H",
+        "Content-Type: application/json",
+        "-H",
+        "Accept: application/json, text/event-stream",
+        "-H",
+        "Origin: null",
+        "-d",
+        "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"registra_esecuzione\",\"arguments\":{\"caso\":\"{caso}\"}}}",
+        "-w",
+        "\n%{http_code}\n"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "python",
+          "/app/verifica.py",
+          "{caso}"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "respinta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "nicolaka/netshoot:v0.13": {
+    "repo_digests": [
+      "nicolaka/netshoot@sha256:a20c2531bf35436ed3766cd6cfe89d352b050ccc4d7005ce6400adf97503da1b"
+    ],
+    "id": "sha256:a20c2531bf35436ed3766cd6cfe89d352b050ccc4d7005ce6400adf97503da1b"
+  },
+  "curlimages/curl:8.11.1": {
+    "repo_digests": [
+      "curlimages/curl@sha256:c1fe1679c34d9784c1b0d1e5f62ac0a79fca01fb6377cdd33e90473c6f9f9a69"
+    ],
+    "id": "sha256:c1fe1679c34d9784c1b0d1e5f62ac0a79fca01fb6377cdd33e90473c6f9f9a69"
+  },
+  "lab-sdk-dns-rebinding:1.23.0": {
+    "repo_digests": [
+      "lab-sdk-dns-rebinding@sha256:983e01e0e81b9229475526d1ec7e6594d35dbf3b89214b6b3c712124f0daee83"
+    ],
+    "id": "sha256:983e01e0e81b9229475526d1ec7e6594d35dbf3b89214b6b3c712124f0daee83"
+  }
+}

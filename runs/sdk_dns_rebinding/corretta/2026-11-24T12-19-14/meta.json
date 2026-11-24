@@ -1,0 +1,96 @@
+{
+  "scenario": "sdk_dns_rebinding",
+  "configurazione": "corretta",
+  "descrizione": "Protezione dal DNS rebinding nell'SDK Python mcp (CVE-2025-66416): versione 1.22.0 contro 1.23.0, con un server FastMCP su Streamable HTTP in ascolto su 127.0.0.1:8000. Le richieste arrivano dalla stessa macchina con gli header Host e Origin del dominio dell'attaccante, separati o insieme. Il tool chiamato crea un file con il nome del caso, e l'esito dipende dalla presenza di quel file.",
+  "variabili_configurazione": {
+    "MCP_VERSION": "1.23.0",
+    "CATTURA_INTERFACCIA": "lo"
+  },
+  "ripetizioni_per_caso": 1,
+  "inizio_utc": "2026-11-24T11:19:14.314+00:00",
+  "sistema": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "file_scenario_sha256": {
+    "compose.yml": "daa3d0f2184c09641bd14585fcd62e3bf331df5e9c364cd002070818e259e594",
+    "Dockerfile": "546e3f82a7515f5a78f88eeb9e04190ba2091cebc28ab988725e5ed242c8cc1a",
+    "scenario.json": "d41c4204815d9aa3898fbc5071369aa68dd179fb8b0dafee6b0fc6e0339b680c",
+    "server.py": "dc3067407c54228b76fa241d0088c5c15abd1b0472f8a2693353225baca41d59",
+    "verifica.py": "32dc2bfbea71dfea05c5a898142a457499e8a82bb583325c62cff93bd917f428"
+  },
+  "run_py_sha256": "012b586eb165487491a0df8f6dd745867d00f488a40f1e1adc503bf6c0d190a2",
+  "git": {
+    "commit": "5f4e67a88258e21c0880f1ddb0096599e7b04028",
+    "modifiche_non_salvate": false
+  },
+  "docker": {
+    "Client": {
+      "Version": "29.9.3",
+      "ApiVersion": "1.56",
+      "DefaultAPIVersion": "1.56",
+      "GitCommit": "5457199",
+      "GoVersion": "go1.26.10",
+      "Os": "windows",
+      "Arch": "amd64",
+      "BuildTime": "Tue Nov  3 21:46:10 2026",
+      "Context": "desktop-linux"
+    },
+    "Server": {
+      "Platform": {
+        "Name": "Docker Desktop 4.99.0 (245822)"
+      },
+      "Version": "29.9.3",
+      "ApiVersion": "1.56",
+      "MinAPIVersion": "1.40",
+      "Os": "linux",
+      "Arch": "amd64",
+      "Components": [
+        {
+          "Name": "Engine",
+          "Version": "29.9.3",
+          "Details": {
+            "ApiVersion": "1.56",
+            "Arch": "amd64",
+            "BuildTime": "Tue Nov  3 21:41:42 2026",
+            "Experimental": "false",
+            "GitCommit": "70efc0e",
+            "GoVersion": "go1.26.10",
+            "KernelVersion": "6.18.58.1-microsoft-standard-WSL2",
+            "MinAPIVersion": "1.40",
+            "Module": "github.com/moby/moby/v2",
+            "ModuleVersion": "v2.0.0+unknown",
+            "Os": "linux"
+          }
+        },
+        {
+          "Name": "containerd",
+          "Version": "v2.4.2",
+          "Details": {
+            "GitCommit": "b7a25261e029d68978bbf290df0a62fc819b3c51"
+          }
+        },
+        {
+          "Name": "runc",
+          "Version": "1.5.2",
+          "Details": {
+            "GitCommit": "v1.5.2-0-g29dd3dc2"
+          }
+        },
+        {
+          "Name": "docker-init",
+          "Version": "0.19.0",
+          "Details": {
+            "GitCommit": "de40ad0"
+          }
+        }
+      ],
+      "GitCommit": "70efc0e",
+      "GoVersion": "go1.26.10",
+      "KernelVersion": "6.18.58.1-microsoft-standard-WSL2",
+      "BuildTime": "2026-11-03T21:41:42.000000000+00:00"
+    }
+  },
+  "compose": "5.7.0",
+  "fine_utc": "2026-11-24T11:19:28.229+00:00",
+  "completata": true,
+  "errore": null
+}

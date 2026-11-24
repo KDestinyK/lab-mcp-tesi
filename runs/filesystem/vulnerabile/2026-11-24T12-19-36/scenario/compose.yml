@@ -1,0 +1,32 @@
+services:
+  target:
+    build:
+      context: .
+      args:
+        FS_VERSION: ${FS_VERSION}
+    image: lab-filesystem:${FS_VERSION}
+    pull_policy: build
+    command: ["sleep", "infinity"]
+    healthcheck:
+      test: ["CMD-SHELL", "command -v mcp-server-filesystem >/dev/null"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+    volumes:
+      - prove:/prove
+    networks: [lab]
+
+  client:
+    image: lab-filesystem:${FS_VERSION}
+    pull_policy: never
+    profiles: ["sonda"]
+    volumes:
+      - prove:/prove
+    networks: [lab]
+
+networks:
+  lab:
+    internal: true
+
+volumes:
+  prove:

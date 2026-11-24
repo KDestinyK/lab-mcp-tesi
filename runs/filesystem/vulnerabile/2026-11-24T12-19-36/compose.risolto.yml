@@ -1,0 +1,46 @@
+name: lab_filesystem_vulnerabile
+services:
+  client:
+    profiles:
+      - sonda
+    image: lab-filesystem:2025.3.28
+    networks:
+      lab: null
+    pull_policy: never
+    volumes:
+      - type: volume
+        source: prove
+        target: /prove
+        volume: {}
+  target:
+    command:
+      - sleep
+      - infinity
+    image: lab-filesystem:2025.3.28
+    networks:
+      lab: null
+    pull_policy: build
+    volumes:
+      - type: volume
+        source: prove
+        target: /prove
+        volume: {}
+    build:
+      context: .\scenarios\filesystem
+      dockerfile: Dockerfile
+      args:
+        FS_VERSION: 2025.3.28
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - command -v mcp-server-filesystem >/dev/null
+      timeout: 3s
+      interval: 2s
+      retries: 15
+networks:
+  lab:
+    name: lab_filesystem_vulnerabile_lab
+    internal: true
+volumes:
+  prove:
+    name: lab_filesystem_vulnerabile_prove

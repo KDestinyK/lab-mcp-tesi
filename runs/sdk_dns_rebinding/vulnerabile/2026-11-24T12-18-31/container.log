@@ -1,0 +1,122 @@
+===== container usati per tutti i casi =====
+### docker compose --profile * -p lab_sdk_dns_rebinding_vulnerabile -f .\scenarios\sdk_dns_rebinding\compose.yml logs --timestamps --no-color
+cattura-1  | 2026-11-24T11:18:40.965562420Z tcpdump: listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+cattura-1  | 2026-11-24T11:18:47.979142911Z 90 packets captured
+cattura-1  | 2026-11-24T11:18:47.979152982Z 180 packets received by filter
+target-1   | 2026-11-24T11:18:38.792858866Z /usr/local/lib/python3.12/site-packages/pydantic_settings/sources/utils.py:51: IncompleteFieldDefinitionWarning: Field 'lifespan' has an incomplete definition: its annotation contains an unresolved forward reference, so settings sources may fail to correctly resolve its value. Call `model_rebuild()` on the model where the field is defined, once all the referenced types are defined.
+target-1   | 2026-11-24T11:18:38.792972947Z   warnings.warn(  # noqa: B028  (called from many sources at differing depths, so no stacklevel is correct)
+cattura-1  | 2026-11-24T11:18:47.979155082Z 0 packets dropped by kernel
+target-1   | 2026-11-24T11:18:38.795503087Z mcp 1.22.0, protezione DNS rebinding attiva: False
+target-1   | 2026-11-24T11:18:38.812154238Z INFO:     Started server process [1]
+target-1   | 2026-11-24T11:18:38.812160710Z INFO:     Waiting for application startup.
+target-1   | 2026-11-24T11:18:38.812336597Z StreamableHTTP session manager started
+target-1   | 2026-11-24T11:18:38.812390360Z INFO:     Application startup complete.
+target-1   | 2026-11-24T11:18:38.812491751Z INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+target-1   | 2026-11-24T11:18:44.563679623Z Processing request of type CallToolRequest
+target-1   | 2026-11-24T11:18:44.563897940Z tool eseguito per il caso controllo_host_locale
+target-1   | 2026-11-24T11:18:44.565357991Z INFO:     127.0.0.1:43752 - "POST /mcp HTTP/1.1" 200 OK
+target-1   | 2026-11-24T11:18:44.565521091Z Terminating session: None
+target-1   | 2026-11-24T11:18:44.566858587Z Error in message router
+target-1   | 2026-11-24T11:18:44.566863868Z Traceback (most recent call last):
+target-1   | 2026-11-24T11:18:44.566865046Z   File "/usr/local/lib/python3.12/site-packages/mcp/server/streamable_http.py", line 849, in message_router
+target-1   | 2026-11-24T11:18:44.566865922Z     async for session_message in write_stream_reader:
+target-1   | 2026-11-24T11:18:44.566866822Z   File "/usr/local/lib/python3.12/site-packages/anyio/abc/_streams.py", line 37, in __anext__
+target-1   | 2026-11-24T11:18:44.566867718Z     return await self.receive()
+target-1   | 2026-11-24T11:18:44.566868550Z            ^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:44.566869264Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 119, in receive
+target-1   | 2026-11-24T11:18:44.566870001Z     return self.receive_nowait()
+target-1   | 2026-11-24T11:18:44.566870710Z            ^^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:44.566871412Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 101, in receive_nowait
+target-1   | 2026-11-24T11:18:44.566872142Z     raise ClosedResourceError
+target-1   | 2026-11-24T11:18:44.566872862Z anyio.ClosedResourceError
+target-1   | 2026-11-24T11:18:45.134150493Z Processing request of type CallToolRequest
+target-1   | 2026-11-24T11:18:45.134308719Z tool eseguito per il caso controllo_origin_locale
+target-1   | 2026-11-24T11:18:45.134962978Z INFO:     127.0.0.1:43754 - "POST /mcp HTTP/1.1" 200 OK
+target-1   | 2026-11-24T11:18:45.135096711Z Terminating session: None
+target-1   | 2026-11-24T11:18:45.135337518Z Error in message router
+target-1   | 2026-11-24T11:18:45.135343958Z Traceback (most recent call last):
+target-1   | 2026-11-24T11:18:45.135345370Z   File "/usr/local/lib/python3.12/site-packages/mcp/server/streamable_http.py", line 849, in message_router
+target-1   | 2026-11-24T11:18:45.135346889Z     async for session_message in write_stream_reader:
+target-1   | 2026-11-24T11:18:45.135347802Z   File "/usr/local/lib/python3.12/site-packages/anyio/abc/_streams.py", line 37, in __anext__
+target-1   | 2026-11-24T11:18:45.135349066Z     return await self.receive()
+target-1   | 2026-11-24T11:18:45.135350105Z            ^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:45.135350814Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 119, in receive
+target-1   | 2026-11-24T11:18:45.135351541Z     return self.receive_nowait()
+target-1   | 2026-11-24T11:18:45.135352208Z            ^^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:45.135352930Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 101, in receive_nowait
+target-1   | 2026-11-24T11:18:45.135353637Z     raise ClosedResourceError
+target-1   | 2026-11-24T11:18:45.135354342Z anyio.ClosedResourceError
+target-1   | 2026-11-24T11:18:45.695768866Z Processing request of type CallToolRequest
+target-1   | 2026-11-24T11:18:45.695864861Z tool eseguito per il caso host_esterno
+target-1   | 2026-11-24T11:18:45.696497858Z INFO:     127.0.0.1:43770 - "POST /mcp HTTP/1.1" 200 OK
+target-1   | 2026-11-24T11:18:45.696675356Z Terminating session: None
+target-1   | 2026-11-24T11:18:45.696821252Z Error in message router
+target-1   | 2026-11-24T11:18:45.696823378Z Traceback (most recent call last):
+target-1   | 2026-11-24T11:18:45.696824269Z   File "/usr/local/lib/python3.12/site-packages/mcp/server/streamable_http.py", line 849, in message_router
+target-1   | 2026-11-24T11:18:45.696829737Z     async for session_message in write_stream_reader:
+target-1   | 2026-11-24T11:18:45.696830441Z   File "/usr/local/lib/python3.12/site-packages/anyio/abc/_streams.py", line 37, in __anext__
+target-1   | 2026-11-24T11:18:45.696831384Z     return await self.receive()
+target-1   | 2026-11-24T11:18:45.696831899Z            ^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:45.696832383Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 119, in receive
+target-1   | 2026-11-24T11:18:45.696832876Z     return self.receive_nowait()
+target-1   | 2026-11-24T11:18:45.696833375Z            ^^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:45.696834135Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 101, in receive_nowait
+target-1   | 2026-11-24T11:18:45.696834631Z     raise ClosedResourceError
+target-1   | 2026-11-24T11:18:45.696835124Z anyio.ClosedResourceError
+target-1   | 2026-11-24T11:18:46.218533089Z Processing request of type CallToolRequest
+target-1   | 2026-11-24T11:18:46.218675673Z tool eseguito per il caso origin_esterna
+target-1   | 2026-11-24T11:18:46.219287201Z INFO:     127.0.0.1:43774 - "POST /mcp HTTP/1.1" 200 OK
+target-1   | 2026-11-24T11:18:46.219409298Z Terminating session: None
+target-1   | 2026-11-24T11:18:46.219586216Z Error in message router
+target-1   | 2026-11-24T11:18:46.219591318Z Traceback (most recent call last):
+target-1   | 2026-11-24T11:18:46.219592517Z   File "/usr/local/lib/python3.12/site-packages/mcp/server/streamable_http.py", line 849, in message_router
+target-1   | 2026-11-24T11:18:46.219593750Z     async for session_message in write_stream_reader:
+target-1   | 2026-11-24T11:18:46.219594604Z   File "/usr/local/lib/python3.12/site-packages/anyio/abc/_streams.py", line 37, in __anext__
+target-1   | 2026-11-24T11:18:46.219595555Z     return await self.receive()
+target-1   | 2026-11-24T11:18:46.219596426Z            ^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:46.219597179Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 119, in receive
+target-1   | 2026-11-24T11:18:46.219597928Z     return self.receive_nowait()
+target-1   | 2026-11-24T11:18:46.219598632Z            ^^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:46.219599369Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 101, in receive_nowait
+target-1   | 2026-11-24T11:18:46.219600112Z     raise ClosedResourceError
+target-1   | 2026-11-24T11:18:46.219600841Z anyio.ClosedResourceError
+target-1   | 2026-11-24T11:18:46.764768280Z Processing request of type CallToolRequest
+target-1   | 2026-11-24T11:18:46.764862936Z tool eseguito per il caso host_e_origin_esterni
+target-1   | 2026-11-24T11:18:46.765485841Z INFO:     127.0.0.1:43790 - "POST /mcp HTTP/1.1" 200 OK
+target-1   | 2026-11-24T11:18:46.765633119Z Terminating session: None
+target-1   | 2026-11-24T11:18:46.765922718Z Error in message router
+target-1   | 2026-11-24T11:18:46.765925755Z Traceback (most recent call last):
+target-1   | 2026-11-24T11:18:46.765926873Z   File "/usr/local/lib/python3.12/site-packages/mcp/server/streamable_http.py", line 849, in message_router
+target-1   | 2026-11-24T11:18:46.765927818Z     async for session_message in write_stream_reader:
+target-1   | 2026-11-24T11:18:46.765928681Z   File "/usr/local/lib/python3.12/site-packages/anyio/abc/_streams.py", line 37, in __anext__
+target-1   | 2026-11-24T11:18:46.765929565Z     return await self.receive()
+target-1   | 2026-11-24T11:18:46.765930303Z            ^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:46.765931060Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 119, in receive
+target-1   | 2026-11-24T11:18:46.765931843Z     return self.receive_nowait()
+target-1   | 2026-11-24T11:18:46.765932591Z            ^^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:46.765933330Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 101, in receive_nowait
+target-1   | 2026-11-24T11:18:46.765934052Z     raise ClosedResourceError
+target-1   | 2026-11-24T11:18:46.765934740Z anyio.ClosedResourceError
+target-1   | 2026-11-24T11:18:47.320249590Z Processing request of type CallToolRequest
+target-1   | 2026-11-24T11:18:47.320350525Z tool eseguito per il caso origin_null
+target-1   | 2026-11-24T11:18:47.321011814Z INFO:     127.0.0.1:43806 - "POST /mcp HTTP/1.1" 200 OK
+target-1   | 2026-11-24T11:18:47.321175044Z Terminating session: None
+target-1   | 2026-11-24T11:18:47.321336407Z Error in message router
+target-1   | 2026-11-24T11:18:47.321342057Z Traceback (most recent call last):
+target-1   | 2026-11-24T11:18:47.321343029Z   File "/usr/local/lib/python3.12/site-packages/mcp/server/streamable_http.py", line 849, in message_router
+target-1   | 2026-11-24T11:18:47.321344082Z     async for session_message in write_stream_reader:
+target-1   | 2026-11-24T11:18:47.321348917Z   File "/usr/local/lib/python3.12/site-packages/anyio/abc/_streams.py", line 37, in __anext__
+target-1   | 2026-11-24T11:18:47.321349701Z     return await self.receive()
+target-1   | 2026-11-24T11:18:47.321350307Z            ^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:47.321351435Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 119, in receive
+target-1   | 2026-11-24T11:18:47.321351972Z     return self.receive_nowait()
+target-1   | 2026-11-24T11:18:47.321352484Z            ^^^^^^^^^^^^^^^^^^^^^
+target-1   | 2026-11-24T11:18:47.321353029Z   File "/usr/local/lib/python3.12/site-packages/anyio/streams/memory.py", line 101, in receive_nowait
+target-1   | 2026-11-24T11:18:47.321353522Z     raise ClosedResourceError
+target-1   | 2026-11-24T11:18:47.321354033Z anyio.ClosedResourceError
+target-1   | 2026-11-24T11:18:48.138207438Z INFO:     Shutting down
+target-1   | 2026-11-24T11:18:48.251937323Z INFO:     Waiting for application shutdown.
+target-1   | 2026-11-24T11:18:48.251961365Z StreamableHTTP session manager shutting down
+target-1   | 2026-11-24T11:18:48.251962601Z INFO:     Application shutdown complete.
+target-1   | 2026-11-24T11:18:48.251963366Z INFO:     Finished server process [1]
+

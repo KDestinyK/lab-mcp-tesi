@@ -1,0 +1,3 @@
+===== container usati per tutti i casi =====
+### docker compose --profile * -p lab_filesystem_vulnerabile -f .\scenarios\filesystem\compose.yml logs --timestamps --no-color
+

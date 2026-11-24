@@ -1,0 +1,97 @@
+{
+  "scenario": "mcp_inspector",
+  "configurazione": "vulnerabile",
+  "descrizione": "Autenticazione nel proxy di MCP Inspector (CVE-2025-49596): versione 0.14.0, senza controlli, contro 0.14.1, che richiede un token di sessione e controlla l'Origin. I primi tre casi chiedono /config, che non esegue nulla; gli ultimi due chiedono /sse con transportType=stdio, che fa avviare al proxy il comando touch su un file del volume condiviso, una volta con l'Origin di un sito esterno e una senza Origin. Il token corretto, quando serve, è letto dal log di avvio del proxy.",
+  "variabili_configurazione": {
+    "INSPECTOR_VERSION": "0.14.0",
+    "CATTURA_INTERFACCIA": "lo"
+  },
+  "ripetizioni_per_caso": 1,
+  "inizio_utc": "2026-11-24T11:21:16.764+00:00",
+  "sistema": "Windows-11-10.0.26200-SP0",
+  "python": "3.14.6 (tags/v3.14.6:c63aec6, Jun 10 2026, 10:26:10) [MSC v.1944 64 bit (AMD64)]",
+  "file_scenario_sha256": {
+    "attacco.js": "dbc4ab5e659980823ed5eb71bf68d822b1dfd4e0183d091eeb218a82514e05ac",
+    "client.js": "5e19083e9d26ee14770227910536af08e555ff9d66aca294bca8c8e8e1d6eb41",
+    "compose.yml": "659716c161fa91d5619120472ee1b2be04f2cbc7ebaf370831cb8a8984f236e3",
+    "Dockerfile": "fed52949723055729dce84373098bab3286285a3db0d4f71519778fd356a8605",
+    "salute.js": "580473e6a2907564605aaf1ff0d0c6fd7a9f2f74bf06d5d28d880c3b5d63c1bd",
+    "scenario.json": "e7799e7fdaf998d4268f2f35a76a872a96ab07387300b0b0923d858e7c7fdfdc"
+  },
+  "run_py_sha256": "012b586eb165487491a0df8f6dd745867d00f488a40f1e1adc503bf6c0d190a2",
+  "git": {
+    "commit": "5f4e67a88258e21c0880f1ddb0096599e7b04028",
+    "modifiche_non_salvate": false
+  },
+  "docker": {
+    "Client": {
+      "Version": "29.9.3",
+      "ApiVersion": "1.56",
+      "DefaultAPIVersion": "1.56",
+      "GitCommit": "5457199",
+      "GoVersion": "go1.26.10",
+      "Os": "windows",
+      "Arch": "amd64",
+      "BuildTime": "Tue Nov  3 21:46:10 2026",
+      "Context": "desktop-linux"
+    },
+    "Server": {
+      "Platform": {
+        "Name": "Docker Desktop 4.99.0 (245822)"
+      },
+      "Version": "29.9.3",
+      "ApiVersion": "1.56",
+      "MinAPIVersion": "1.40",
+      "Os": "linux",
+      "Arch": "amd64",
+      "Components": [
+        {
+          "Name": "Engine",
+          "Version": "29.9.3",
+          "Details": {
+            "ApiVersion": "1.56",
+            "Arch": "amd64",
+            "BuildTime": "Tue Nov  3 21:41:42 2026",
+            "Experimental": "false",
+            "GitCommit": "70efc0e",
+            "GoVersion": "go1.26.10",
+            "KernelVersion": "6.18.58.1-microsoft-standard-WSL2",
+            "MinAPIVersion": "1.40",
+            "Module": "github.com/moby/moby/v2",
+            "ModuleVersion": "v2.0.0+unknown",
+            "Os": "linux"
+          }
+        },
+        {
+          "Name": "containerd",
+          "Version": "v2.4.2",
+          "Details": {
+            "GitCommit": "b7a25261e029d68978bbf290df0a62fc819b3c51"
+          }
+        },
+        {
+          "Name": "runc",
+          "Version": "1.5.2",
+          "Details": {
+            "GitCommit": "v1.5.2-0-g29dd3dc2"
+          }
+        },
+        {
+          "Name": "docker-init",
+          "Version": "0.19.0",
+          "Details": {
+            "GitCommit": "de40ad0"
+          }
+        }
+      ],
+      "GitCommit": "70efc0e",
+      "GoVersion": "go1.26.10",
+      "KernelVersion": "6.18.58.1-microsoft-standard-WSL2",
+      "BuildTime": "2026-11-03T21:41:42.000000000+00:00"
+    }
+  },
+  "compose": "5.7.0",
+  "fine_utc": "2026-11-24T11:21:36.977+00:00",
+  "completata": true,
+  "errore": null
+}

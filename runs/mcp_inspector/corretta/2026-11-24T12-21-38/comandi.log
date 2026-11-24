@@ -1,0 +1,95 @@
+[2026-11-24T11:21:39.056+00:00] $ docker version --format {{json .}}
+    exit=0 durata_ms=67
+[2026-11-24T11:21:39.124+00:00] $ docker compose version --short
+    exit=0 durata_ms=83
+[2026-11-24T11:21:39.208+00:00] $ docker compose --profile * -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml config
+    exit=0 durata_ms=105
+[2026-11-24T11:21:39.314+00:00] $ docker compose --profile * -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml pull --ignore-pull-failures
+    exit=0 durata_ms=1495
+    stderr: Image lab-mcp-inspector:0.14.1 Skipped 
+             Image lab-mcp-inspector:0.14.1 Skipped 
+             Image nicolaka/netshoot:v0.13 Pulling 
+             Image nicolaka/netshoot:v0.13 Pulled
+[2026-11-24T11:21:40.810+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml up -d --wait --build
+    exit=0 durata_ms=4622
+    stderr: Image lab-mcp-inspector:0.14.1 Building 
+             Image lab-mcp-inspector:0.14.1 Built 
+             Network lab_mcp_inspector_corretta_lab Creating 
+             Volume lab_mcp_inspector_corretta_condiviso Creating 
+             Volume lab_mcp_inspector_corretta_condiviso Creating 
+             Network lab_mcp_inspector_corretta_lab Creating 
+             Volume lab_mcp_inspector_corretta_condiviso Created 
+             Volume lab_mcp_inspector_corretta_condiviso Created 
+             Network lab_mcp_inspector_corretta_lab Created 
+             Network lab_mcp_inspector_corretta_lab Created 
+             Container lab_mcp_inspector_corretta-target-1 Creating 
+             Container lab_mcp_inspector_corretta-target-1 Created 
+             Container lab_mcp_inspector_corretta-cattura-1 Creating 
+             Container lab_mcp_inspector_corretta-cattura-1 Created 
+             Container lab_mcp_inspector_corretta-target-1 Starting 
+             Container lab_mcp_inspector_corretta-target-1 Started 
+             Container lab_mcp_inspector_corretta-target-1 Waiting 
+             Container lab_mcp_inspector_corretta-target-1 Healthy 
+             Container lab_mcp_inspector_corretta-cattura-1 Starting 
+             Container lab_mcp_inspector_corretta-cattura-1 Started 
+             Container lab_mcp_inspector_corretta-cattura-1 Waiting 
+             Container lab_mcp_inspector_corretta-target-1 Waiting 
+             Container lab_mcp_inspector_corretta-cattura-1 Healthy 
+             Container lab_mcp_inspector_corretta-target-1 Healthy
+[2026-11-24T11:21:47.433+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target node --version
+    exit=0 durata_ms=126
+[2026-11-24T11:21:47.561+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target npm ls -g @modelcontextprotocol/inspector-server
+    exit=0 durata_ms=477
+[2026-11-24T11:21:48.039+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target npm ls -g shell-quote spawn-rx
+    exit=0 durata_ms=381
+[2026-11-24T11:21:48.421+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target npm --version
+    exit=0 durata_ms=169
+[2026-11-24T11:21:48.591+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target npm ls -g --all
+    exit=0 durata_ms=369
+[2026-11-24T11:21:48.961+00:00] $ docker compose --progress quiet -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml run --rm -T --no-deps client node /app/client.js controllo_token_corretto si no locale
+    exit=0 durata_ms=471
+[2026-11-24T11:21:49.433+00:00] $ docker compose --progress quiet -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml run --rm -T --no-deps client node /app/client.js limite_token_errato si si locale
+    exit=0 durata_ms=462
+[2026-11-24T11:21:49.897+00:00] $ docker compose --progress quiet -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml run --rm -T --no-deps client node /app/client.js attacco_senza_autenticazione no no esterna
+    exit=0 durata_ms=452
+[2026-11-24T11:21:50.350+00:00] $ docker compose --progress quiet -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml run --rm -T --no-deps client node /app/attacco.js attacco_esecuzione_comando esterna
+    exit=0 durata_ms=989
+[2026-11-24T11:21:51.340+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target sh -c if [ -f /condiviso/exploit-attacco_esecuzione_comando ]; then echo eseguito; else echo non_eseguito; fi
+    exit=0 durata_ms=122
+[2026-11-24T11:21:51.463+00:00] $ docker compose --progress quiet -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml run --rm -T --no-deps client node /app/attacco.js attacco_processo_locale nessuna
+    exit=0 durata_ms=966
+[2026-11-24T11:21:52.429+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml exec -T target sh -c if [ -f /condiviso/exploit-attacco_processo_locale ]; then echo eseguito; else echo non_eseguito; fi
+    exit=0 durata_ms=123
+[2026-11-24T11:21:52.553+00:00] $ docker compose --profile * -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml config --images
+    exit=0 durata_ms=100
+[2026-11-24T11:21:52.654+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} nicolaka/netshoot:v0.13
+    exit=0 durata_ms=61
+[2026-11-24T11:21:52.715+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} lab-mcp-inspector:0.14.1
+    exit=0 durata_ms=51
+[2026-11-24T11:21:52.767+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} lab-mcp-inspector:0.14.1
+    exit=0 durata_ms=51
+[2026-11-24T11:21:52.819+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}}|{{.Created}} node:22-slim
+    exit=1 durata_ms=38
+    stderr: Error response from daemon: No such image: node:22-slim
+[2026-11-24T11:21:52.859+00:00] $ docker compose -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml stop -t 5
+    exit=0 durata_ms=5421
+    stderr: Container lab_mcp_inspector_corretta-cattura-1 Stopping 
+             Container lab_mcp_inspector_corretta-cattura-1 Stopped 
+             Container lab_mcp_inspector_corretta-target-1 Stopping 
+             Container lab_mcp_inspector_corretta-target-1 Stopped
+[2026-11-24T11:21:58.281+00:00] $ docker compose --profile * -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml logs --timestamps --no-color
+    exit=0 durata_ms=142
+[2026-11-24T11:21:58.424+00:00] $ docker compose --profile * -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml down -v --remove-orphans
+    exit=0 durata_ms=352
+    stderr: Container lab_mcp_inspector_corretta-cattura-1 Stopping 
+             Container lab_mcp_inspector_corretta-cattura-1 Stopped 
+             Container lab_mcp_inspector_corretta-cattura-1 Removing 
+             Container lab_mcp_inspector_corretta-cattura-1 Removed 
+             Container lab_mcp_inspector_corretta-target-1 Stopping 
+             Container lab_mcp_inspector_corretta-target-1 Stopped 
+             Container lab_mcp_inspector_corretta-target-1 Removing 
+             Container lab_mcp_inspector_corretta-target-1 Removed 
+             Volume lab_mcp_inspector_corretta_condiviso Removing 
+             Network lab_mcp_inspector_corretta_lab Removing 
+             Volume lab_mcp_inspector_corretta_condiviso Removed 
+             Network lab_mcp_inspector_corretta_lab Removed

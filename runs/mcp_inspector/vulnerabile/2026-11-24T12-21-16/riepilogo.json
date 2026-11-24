@@ -1,0 +1,52 @@
+{
+  "scenario": "mcp_inspector",
+  "configurazione": "vulnerabile",
+  "completata": true,
+  "errore": null,
+  "ripetizioni_per_caso": 1,
+  "casi": {
+    "controllo_token_corretto": {
+      "tipo": "controllo",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "limite_token_errato": {
+      "tipo": "limite",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "attacco_senza_autenticazione": {
+      "tipo": "attacco",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "attacco_esecuzione_comando": {
+      "tipo": "attacco",
+      "atteso": "eseguito",
+      "esiti": {
+        "eseguito": 1
+      },
+      "conforme": true
+    },
+    "attacco_processo_locale": {
+      "tipo": "attacco",
+      "atteso": "eseguito",
+      "esiti": {
+        "eseguito": 1
+      },
+      "conforme": true
+    }
+  },
+  "casi_conformi": 5,
+  "casi_totali": 5,
+  "casi_saltati": []
+}

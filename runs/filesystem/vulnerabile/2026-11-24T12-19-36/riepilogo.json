@@ -1,0 +1,44 @@
+{
+  "scenario": "filesystem",
+  "configurazione": "vulnerabile",
+  "completata": true,
+  "errore": null,
+  "ripetizioni_per_caso": 1,
+  "casi": {
+    "controllo_lettura_consentita": {
+      "tipo": "controllo",
+      "atteso": "letto_consentito",
+      "esiti": {
+        "letto_consentito": 1
+      },
+      "conforme": true
+    },
+    "limite_percorso_esterno": {
+      "tipo": "limite",
+      "atteso": "negato",
+      "esiti": {
+        "negato": 1
+      },
+      "conforme": true
+    },
+    "attacco_prefisso": {
+      "tipo": "attacco",
+      "atteso": "esfiltrato",
+      "esiti": {
+        "esfiltrato": 1
+      },
+      "conforme": true
+    },
+    "attacco_collegamento_simbolico": {
+      "tipo": "attacco",
+      "atteso": "esfiltrato",
+      "esiti": {
+        "esfiltrato": 1
+      },
+      "conforme": true
+    }
+  },
+  "casi_conformi": 4,
+  "casi_totali": 4,
+  "casi_saltati": []
+}

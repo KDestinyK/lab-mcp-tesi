@@ -1,0 +1,66 @@
+name: lab_mcp_inspector_vulnerabile
+services:
+  cattura:
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command:
+      - sh
+      - -c
+      - exec tcpdump -i lo -U -w /captures/traffico-$$(date -u +%Y%m%dT%H%M%SZ).pcap
+    image: nicolaka/netshoot:v0.13
+    network_mode: service:target
+    volumes:
+      - type: bind
+        source: ./runs/mcp_inspector/vulnerabile/2026-11-24T12-21-16/pcap
+        target: /captures
+    depends_on:
+      target:
+        condition: service_healthy
+        required: true
+  client:
+    profiles:
+      - sonda
+    image: lab-mcp-inspector:0.14.0
+    network_mode: service:target
+    pull_policy: never
+    volumes:
+      - type: volume
+        source: condiviso
+        target: /condiviso
+        volume: {}
+    depends_on:
+      target:
+        condition: service_started
+        restart: true
+        required: true
+  target:
+    image: lab-mcp-inspector:0.14.0
+    networks:
+      lab: null
+    pull_policy: build
+    volumes:
+      - type: volume
+        source: condiviso
+        target: /condiviso
+        volume: {}
+    build:
+      context: .\scenarios\mcp_inspector
+      dockerfile: Dockerfile
+      args:
+        INSPECTOR_VERSION: 0.14.0
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - /app/salute.js
+      timeout: 3s
+      interval: 2s
+      retries: 15
+networks:
+  lab:
+    name: lab_mcp_inspector_vulnerabile_lab
+    internal: true
+volumes:
+  condiviso:
+    name: lab_mcp_inspector_vulnerabile_condiviso

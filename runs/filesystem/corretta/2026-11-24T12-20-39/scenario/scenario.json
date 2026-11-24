@@ -1,0 +1,153 @@
+{
+  "descrizione": "Controllo degli accessi nel server @modelcontextprotocol/server-filesystem (CVE-2025-53110 e CVE-2025-53109): versione 2025.3.28 contro 2025.7.1. Il server ha una sola cartella consentita, /dati/area_consentita, e un client MCP su stdio chiama read_file su percorsi diversi. Il client salva nel volume /prove il testo ricevuto, anche quando la risposta è un errore, e l'esito dipende dal marcatore che vi compare. Con stdio non c'è traffico di rete da catturare, e lo scambio JSON-RPC completo è in risultati.jsonl.",
+  "configurazioni": {
+    "vulnerabile": {
+      "file": "compose.yml",
+      "env": {
+        "FS_VERSION": "2025.3.28"
+      }
+    },
+    "corretta": {
+      "file": "compose.yml",
+      "env": {
+        "FS_VERSION": "2025.7.1"
+      }
+    }
+  },
+  "servizio_client": "client",
+  "esiti": {
+    "esfiltrato": "esfiltrato",
+    "letto_consentito": "letto_consentito",
+    "negato": "negato"
+  },
+  "riavvia_tra_casi": false,
+  "attesa_secondi": 2,
+  "comandi_versioni": [
+    {
+      "servizio": "target",
+      "comando": [
+        "node",
+        "--version"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "ls",
+        "-g",
+        "@modelcontextprotocol/sdk"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "--version"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "ls",
+        "-g",
+        "--all"
+      ]
+    }
+  ],
+  "casi": [
+    {
+      "id": "controllo_lettura_consentita",
+      "tipo": "controllo",
+      "descrizione": "Lettura di un file dentro la cartella consentita. Deve funzionare in entrambe le versioni.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "/dati/area_consentita/documento.txt"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "sh",
+          "-c",
+          "f=/prove/{caso}.txt; if grep -q MARCATORE_RISERVATO_9b21 \"$f\" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a \"$f\" 2>/dev/null; then echo letto_consentito; else echo negato; fi"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "letto_consentito",
+        "corretta": "letto_consentito"
+      }
+    },
+    {
+      "id": "limite_percorso_esterno",
+      "tipo": "limite",
+      "descrizione": "Lettura richiesta con un percorso assoluto che punta a una cartella fuori da quella consentita. Deve essere negata in entrambe le versioni.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "/dati/area_riservata/segreto.txt"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "sh",
+          "-c",
+          "f=/prove/{caso}.txt; if grep -q MARCATORE_RISERVATO_9b21 \"$f\" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a \"$f\" 2>/dev/null; then echo letto_consentito; else echo negato; fi"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "negato",
+        "corretta": "negato"
+      }
+    },
+    {
+      "id": "attacco_prefisso",
+      "tipo": "attacco",
+      "descrizione": "CVE-2025-53110: percorso che condivide il prefisso stringa della cartella consentita ma è fuori dai limiti. Con la 2025.3.28 il contenuto riservato viene esfiltrato; con la 2025.7.1 l'accesso è negato.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "/dati/area_consentita_riservata/segreto.txt"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "sh",
+          "-c",
+          "f=/prove/{caso}.txt; if grep -q MARCATORE_RISERVATO_9b21 \"$f\" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a \"$f\" 2>/dev/null; then echo letto_consentito; else echo negato; fi"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "esfiltrato",
+        "corretta": "negato"
+      }
+    },
+    {
+      "id": "attacco_collegamento_simbolico",
+      "tipo": "attacco",
+      "descrizione": "CVE-2025-53109: collegamento simbolico dentro la cartella consentita che punta al file riservato. Con la 2025.3.28 il server segue il link; con la 2025.7.1 l'accesso è negato.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "/dati/area_consentita/link_segreto"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "sh",
+          "-c",
+          "f=/prove/{caso}.txt; if grep -q MARCATORE_RISERVATO_9b21 \"$f\" 2>/dev/null; then echo esfiltrato; elif grep -q MARCATORE_CONSENTITO_7f3a \"$f\" 2>/dev/null; then echo letto_consentito; else echo negato; fi"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "esfiltrato",
+        "corretta": "negato"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+===== container usati per tutti i casi =====
+### docker compose --profile * -p lab_mcp_inspector_corretta -f .\scenarios\mcp_inspector\compose.yml logs --timestamps --no-color
+cattura-1  | 2026-11-24T11:21:44.907307821Z tcpdump: listening on lo, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+cattura-1  | 2026-11-24T11:21:52.973390056Z 90 packets captured
+target-1   | 2026-11-24T11:21:42.595174227Z ⚙️ Proxy server listening on 127.0.0.1:6277
+cattura-1  | 2026-11-24T11:21:52.973403354Z 180 packets received by filter
+cattura-1  | 2026-11-24T11:21:52.973404533Z 0 packets dropped by kernel
+target-1   | 2026-11-24T11:21:42.595192989Z 🔑 Session token: b8641949314208e6ccc4cd0e72bee9c37e53b458f6d3c6b8816ee002ff4b3667
+target-1   | 2026-11-24T11:21:42.595194350Z Use this token to authenticate requests or set DANGEROUSLY_OMIT_AUTH=true to disable auth
+target-1   | 2026-11-24T11:21:42.595194912Z 
+target-1   | 2026-11-24T11:21:42.595195444Z 🔗 Open inspector with token pre-filled:
+target-1   | 2026-11-24T11:21:42.595195970Z    http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=b8641949314208e6ccc4cd0e72bee9c37e53b458f6d3c6b8816ee002ff4b3667
+target-1   | 2026-11-24T11:21:42.595196931Z    (Auto-open is disabled when authentication is enabled)
+target-1   | 2026-11-24T11:21:42.595197746Z 
+target-1   | 2026-11-24T11:21:50.247617645Z Invalid origin: http://attaccante.example
+target-1   | 2026-11-24T11:21:50.735826910Z Invalid origin: http://attaccante.example
+

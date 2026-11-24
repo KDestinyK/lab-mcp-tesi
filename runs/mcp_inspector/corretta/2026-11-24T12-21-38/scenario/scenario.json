@@ -1,0 +1,172 @@
+{
+  "descrizione": "Autenticazione nel proxy di MCP Inspector (CVE-2025-49596): versione 0.14.0, senza controlli, contro 0.14.1, che richiede un token di sessione e controlla l'Origin. I primi tre casi chiedono /config, che non esegue nulla; gli ultimi due chiedono /sse con transportType=stdio, che fa avviare al proxy il comando touch su un file del volume condiviso, una volta con l'Origin di un sito esterno e una senza Origin. Il token corretto, quando serve, è letto dal log di avvio del proxy.",
+  "configurazioni": {
+    "vulnerabile": {
+      "file": "compose.yml",
+      "env": {
+        "INSPECTOR_VERSION": "0.14.0",
+        "CATTURA_INTERFACCIA": "lo"
+      }
+    },
+    "corretta": {
+      "file": "compose.yml",
+      "env": {
+        "INSPECTOR_VERSION": "0.14.1",
+        "CATTURA_INTERFACCIA": "lo"
+      }
+    }
+  },
+  "servizio_client": "client",
+  "esiti": {
+    "200": "accettata",
+    "401": "respinta",
+    "403": "respinta",
+    "eseguito": "eseguito",
+    "non_eseguito": "non_eseguito"
+  },
+  "riavvia_tra_casi": false,
+  "attesa_secondi": 2,
+  "comandi_versioni": [
+    {
+      "servizio": "target",
+      "comando": [
+        "node",
+        "--version"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "ls",
+        "-g",
+        "@modelcontextprotocol/inspector-server"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "ls",
+        "-g",
+        "shell-quote",
+        "spawn-rx"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "--version"
+      ]
+    },
+    {
+      "servizio": "target",
+      "comando": [
+        "npm",
+        "ls",
+        "-g",
+        "--all"
+      ]
+    }
+  ],
+  "casi": [
+    {
+      "id": "controllo_token_corretto",
+      "tipo": "controllo",
+      "descrizione": "Richiesta locale con il token di sessione corretto, letto dal log di avvio, e Origin ammessa (http://localhost:6274, quella del client web dell'Inspector). Deve funzionare in entrambe le versioni.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "si",
+        "no",
+        "locale"
+      ],
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "accettata"
+      }
+    },
+    {
+      "id": "limite_token_errato",
+      "tipo": "limite",
+      "descrizione": "Token presente ma sbagliato, stessa Origin del controllo.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "si",
+        "si",
+        "locale"
+      ],
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "respinta"
+      }
+    },
+    {
+      "id": "attacco_senza_autenticazione",
+      "tipo": "attacco",
+      "descrizione": "Nessun token e Origin del dominio dell'attaccante, come la richiesta di una pagina web esterna.",
+      "comando": [
+        "node",
+        "/app/client.js",
+        "{caso}",
+        "no",
+        "no",
+        "esterna"
+      ],
+      "atteso": {
+        "vulnerabile": "accettata",
+        "corretta": "respinta"
+      }
+    },
+    {
+      "id": "attacco_esecuzione_comando",
+      "tipo": "attacco",
+      "descrizione": "CVE-2025-49596: richiesta non autenticata a /sse con transportType=stdio e l'Origin del dominio dell'attaccante. Il comando touch crea un file nel volume condiviso, che la verifica cerca. Atteso: eseguito con 0.14.0, non eseguito con 0.14.1.",
+      "comando": [
+        "node",
+        "/app/attacco.js",
+        "{caso}",
+        "esterna"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "sh",
+          "-c",
+          "if [ -f /condiviso/exploit-{caso} ]; then echo eseguito; else echo non_eseguito; fi"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "eseguito",
+        "corretta": "non_eseguito"
+      }
+    },
+    {
+      "id": "attacco_processo_locale",
+      "tipo": "attacco",
+      "descrizione": "Stessa richiesta a /sse senza token e senza Origin, come quella di un processo locale. Atteso: eseguito con 0.14.0, non eseguito con 0.14.1 (401).",
+      "comando": [
+        "node",
+        "/app/attacco.js",
+        "{caso}",
+        "nessuna"
+      ],
+      "verifica": {
+        "servizio": "target",
+        "comando": [
+          "sh",
+          "-c",
+          "if [ -f /condiviso/exploit-{caso} ]; then echo eseguito; else echo non_eseguito; fi"
+        ]
+      },
+      "atteso": {
+        "vulnerabile": "eseguito",
+        "corretta": "non_eseguito"
+      }
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+name: lab_sdk_dns_rebinding_corretta
+services:
+  cattura:
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    command:
+      - sh
+      - -c
+      - exec tcpdump -i lo -U -w /captures/traffico-$$(date -u +%Y%m%dT%H%M%SZ).pcap
+    image: nicolaka/netshoot:v0.13
+    network_mode: service:target
+    volumes:
+      - type: bind
+        source: ./runs/sdk_dns_rebinding/corretta/2026-11-24T12-19-14/pcap
+        target: /captures
+    depends_on:
+      target:
+        condition: service_healthy
+        required: true
+  client:
+    profiles:
+      - sonda
+    image: curlimages/curl:8.11.1
+    network_mode: service:target
+    depends_on:
+      target:
+        condition: service_started
+        restart: true
+        required: true
+  target:
+    image: lab-sdk-dns-rebinding:1.23.0
+    networks:
+      lab: null
+    pull_policy: build
+    build:
+      context: .\scenarios\sdk_dns_rebinding
+      dockerfile: Dockerfile
+      args:
+        MCP_VERSION: 1.23.0
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import socket; socket.create_connection(('127.0.0.1', 8000), 2)
+      timeout: 3s
+      interval: 2s
+      retries: 15
+networks:
+  lab:
+    name: lab_sdk_dns_rebinding_corretta_lab
+    internal: true

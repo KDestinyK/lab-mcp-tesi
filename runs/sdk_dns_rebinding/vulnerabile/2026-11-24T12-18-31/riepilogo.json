@@ -1,0 +1,60 @@
+{
+  "scenario": "sdk_dns_rebinding",
+  "configurazione": "vulnerabile",
+  "completata": true,
+  "errore": null,
+  "ripetizioni_per_caso": 1,
+  "casi": {
+    "controllo_host_locale": {
+      "tipo": "controllo",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "controllo_origin_locale": {
+      "tipo": "controllo",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "host_esterno": {
+      "tipo": "attacco",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "origin_esterna": {
+      "tipo": "attacco",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "host_e_origin_esterni": {
+      "tipo": "attacco",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    },
+    "origin_null": {
+      "tipo": "limite",
+      "atteso": "accettata",
+      "esiti": {
+        "accettata": 1
+      },
+      "conforme": true
+    }
+  },
+  "casi_conformi": 6,
+  "casi_totali": 6,
+  "casi_saltati": []
+}

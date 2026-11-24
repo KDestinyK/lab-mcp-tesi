@@ -1,0 +1,227 @@
+[2026-11-24T11:19:14.415+00:00] $ docker version --format {{json .}}
+    exit=0 durata_ms=65
+[2026-11-24T11:19:14.480+00:00] $ docker compose version --short
+    exit=0 durata_ms=81
+[2026-11-24T11:19:14.562+00:00] $ docker compose --profile * -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml config
+    exit=0 durata_ms=98
+[2026-11-24T11:19:14.661+00:00] $ docker compose --profile * -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml pull --ignore-pull-failures
+    exit=0 durata_ms=1531
+    stderr: Image lab-sdk-dns-rebinding:1.23.0 Skipped 
+             Image curlimages/curl:8.11.1 Pulling 
+             Image nicolaka/netshoot:v0.13 Pulling 
+             Image curlimages/curl:8.11.1 Pulled 
+             Image nicolaka/netshoot:v0.13 Pulled
+[2026-11-24T11:19:16.192+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml up -d --wait --build
+    exit=0 durata_ms=4423
+    stderr: Image lab-sdk-dns-rebinding:1.23.0 Building 
+             Image lab-sdk-dns-rebinding:1.23.0 Built 
+             Network lab_sdk_dns_rebinding_corretta_lab Creating 
+             Network lab_sdk_dns_rebinding_corretta_lab Creating 
+             Network lab_sdk_dns_rebinding_corretta_lab Created 
+             Network lab_sdk_dns_rebinding_corretta_lab Created 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Creating 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Created 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Creating 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Created 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Starting 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Started 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Waiting 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Healthy 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Starting 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Started 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Waiting 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Waiting 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Healthy 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Healthy
+[2026-11-24T11:19:22.616+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python --version
+    exit=0 durata_ms=130
+[2026-11-24T11:19:22.747+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target pip show mcp
+    exit=0 durata_ms=289
+[2026-11-24T11:19:23.037+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target pip freeze --all
+    exit=0 durata_ms=284
+[2026-11-24T11:19:23.322+00:00] $ docker compose --progress quiet -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml run --rm -T --no-deps client -sS -i -v -X POST http://127.0.0.1:8000/mcp -H Content-Type: application/json -H Accept: application/json, text/event-stream -d {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"registra_esecuzione","arguments":{"caso":"controllo_host_locale"}}} -w 
+%{http_code}
+
+    exit=0 durata_ms=440
+    stderr: *   Trying 127.0.0.1:8000...
+            * Connected to 127.0.0.1 (127.0.0.1) port 8000
+            * using HTTP/1.x
+            > POST /mcp HTTP/1.1
+            > Host: 127.0.0.1:8000
+            > User-Agent: curl/8.11.1
+            > Content-Type: application/json
+            > Accept: application/json, text/event-stream
+            > Content-Length: 131
+            > 
+            } [131 bytes data]
+            * upload completely sent off: 131 bytes
+            < HTTP/1.1 200 OK
+            < date: Tue, 24 Nov 2026 11:19:22 GMT
+            < server: uvicorn
+            < content-type: application/json
+            < content-length: 185
+            < 
+            { [185 bytes data]
+            * Connection #0 to host 127.0.0.1 left intact
+[2026-11-24T11:19:23.763+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python /app/verifica.py controllo_host_locale
+    exit=0 durata_ms=129
+[2026-11-24T11:19:23.893+00:00] $ docker compose --progress quiet -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml run --rm -T --no-deps client -sS -i -v -X POST http://127.0.0.1:8000/mcp -H Content-Type: application/json -H Accept: application/json, text/event-stream -H Origin: http://localhost:8000 -d {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"registra_esecuzione","arguments":{"caso":"controllo_origin_locale"}}} -w 
+%{http_code}
+
+    exit=0 durata_ms=413
+    stderr: *   Trying 127.0.0.1:8000...
+            * Connected to 127.0.0.1 (127.0.0.1) port 8000
+            * using HTTP/1.x
+            > POST /mcp HTTP/1.1
+            > Host: 127.0.0.1:8000
+            > User-Agent: curl/8.11.1
+            > Content-Type: application/json
+            > Accept: application/json, text/event-stream
+            > Origin: http://localhost:8000
+            > Content-Length: 133
+            > 
+            } [133 bytes data]
+            * upload completely sent off: 133 bytes
+            < HTTP/1.1 200 OK
+            < date: Tue, 24 Nov 2026 11:19:23 GMT
+            < server: uvicorn
+            < content-type: application/json
+            < content-length: 189
+            < 
+            { [189 bytes data]
+            * Connection #0 to host 127.0.0.1 left intact
+[2026-11-24T11:19:24.306+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python /app/verifica.py controllo_origin_locale
+    exit=0 durata_ms=126
+[2026-11-24T11:19:24.433+00:00] $ docker compose --progress quiet -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml run --rm -T --no-deps client -sS -i -v -X POST http://127.0.0.1:8000/mcp -H Content-Type: application/json -H Accept: application/json, text/event-stream -H Host: attaccante.example:8000 -d {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"registra_esecuzione","arguments":{"caso":"host_esterno"}}} -w 
+%{http_code}
+
+    exit=0 durata_ms=447
+    stderr: *   Trying 127.0.0.1:8000...
+            * Connected to 127.0.0.1 (127.0.0.1) port 8000
+            * using HTTP/1.x
+            > POST /mcp HTTP/1.1
+            > Host: attaccante.example:8000
+            > User-Agent: curl/8.11.1
+            > Content-Type: application/json
+            > Accept: application/json, text/event-stream
+            > Content-Length: 122
+            > 
+            } [122 bytes data]
+            * upload completely sent off: 122 bytes
+            < HTTP/1.1 421 Misdirected Request
+            < date: Tue, 24 Nov 2026 11:19:23 GMT
+            < server: uvicorn
+            < content-length: 19
+            < 
+            { [19 bytes data]
+            * Connection #0 to host 127.0.0.1 left intact
+[2026-11-24T11:19:24.880+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python /app/verifica.py host_esterno
+    exit=0 durata_ms=125
+[2026-11-24T11:19:25.006+00:00] $ docker compose --progress quiet -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml run --rm -T --no-deps client -sS -i -v -X POST http://127.0.0.1:8000/mcp -H Content-Type: application/json -H Accept: application/json, text/event-stream -H Origin: http://attaccante.example -d {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"registra_esecuzione","arguments":{"caso":"origin_esterna"}}} -w 
+%{http_code}
+
+    exit=0 durata_ms=445
+    stderr: *   Trying 127.0.0.1:8000...
+            * Connected to 127.0.0.1 (127.0.0.1) port 8000
+            * using HTTP/1.x
+            > POST /mcp HTTP/1.1
+            > Host: 127.0.0.1:8000
+            > User-Agent: curl/8.11.1
+            > Content-Type: application/json
+            > Accept: application/json, text/event-stream
+            > Origin: http://attaccante.example
+            > Content-Length: 124
+            > 
+            } [124 bytes data]
+            * upload completely sent off: 124 bytes
+            < HTTP/1.1 403 Forbidden
+            < date: Tue, 24 Nov 2026 11:19:24 GMT
+            < server: uvicorn
+            < content-length: 21
+            < 
+            { [21 bytes data]
+            * Connection #0 to host 127.0.0.1 left intact
+[2026-11-24T11:19:25.451+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python /app/verifica.py origin_esterna
+    exit=0 durata_ms=134
+[2026-11-24T11:19:25.587+00:00] $ docker compose --progress quiet -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml run --rm -T --no-deps client -sS -i -v -X POST http://127.0.0.1:8000/mcp -H Content-Type: application/json -H Accept: application/json, text/event-stream -H Host: attaccante.example:8000 -H Origin: http://attaccante.example:8000 -d {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"registra_esecuzione","arguments":{"caso":"host_e_origin_esterni"}}} -w 
+%{http_code}
+
+    exit=0 durata_ms=402
+    stderr: *   Trying 127.0.0.1:8000...
+            * Connected to 127.0.0.1 (127.0.0.1) port 8000
+            * using HTTP/1.x
+            > POST /mcp HTTP/1.1
+            > Host: attaccante.example:8000
+            > User-Agent: curl/8.11.1
+            > Content-Type: application/json
+            > Accept: application/json, text/event-stream
+            > Origin: http://attaccante.example:8000
+            > Content-Length: 131
+            > 
+            } [131 bytes data]
+            * upload completely sent off: 131 bytes
+            < HTTP/1.1 421 Misdirected Request
+            < date: Tue, 24 Nov 2026 11:19:24 GMT
+            < server: uvicorn
+            < content-length: 19
+            < 
+            { [19 bytes data]
+            * Connection #0 to host 127.0.0.1 left intact
+[2026-11-24T11:19:25.989+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python /app/verifica.py host_e_origin_esterni
+    exit=0 durata_ms=166
+[2026-11-24T11:19:26.156+00:00] $ docker compose --progress quiet -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml run --rm -T --no-deps client -sS -i -v -X POST http://127.0.0.1:8000/mcp -H Content-Type: application/json -H Accept: application/json, text/event-stream -H Origin: null -d {"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"registra_esecuzione","arguments":{"caso":"origin_null"}}} -w 
+%{http_code}
+
+    exit=0 durata_ms=448
+    stderr: *   Trying 127.0.0.1:8000...
+            * Connected to 127.0.0.1 (127.0.0.1) port 8000
+            * using HTTP/1.x
+            > POST /mcp HTTP/1.1
+            > Host: 127.0.0.1:8000
+            > User-Agent: curl/8.11.1
+            > Content-Type: application/json
+            > Accept: application/json, text/event-stream
+            > Origin: null
+            > Content-Length: 121
+            > 
+            } [121 bytes data]
+            * upload completely sent off: 121 bytes
+            < HTTP/1.1 403 Forbidden
+            < date: Tue, 24 Nov 2026 11:19:25 GMT
+            < server: uvicorn
+            < content-length: 21
+            < 
+            { [21 bytes data]
+            * Connection #0 to host 127.0.0.1 left intact
+[2026-11-24T11:19:26.605+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml exec -T target python /app/verifica.py origin_null
+    exit=0 durata_ms=127
+[2026-11-24T11:19:26.733+00:00] $ docker compose --profile * -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml config --images
+    exit=0 durata_ms=99
+[2026-11-24T11:19:26.833+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} nicolaka/netshoot:v0.13
+    exit=0 durata_ms=55
+[2026-11-24T11:19:26.889+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} curlimages/curl:8.11.1
+    exit=0 durata_ms=47
+[2026-11-24T11:19:26.936+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}} lab-sdk-dns-rebinding:1.23.0
+    exit=0 durata_ms=51
+[2026-11-24T11:19:26.989+00:00] $ docker image inspect --format {{json .RepoDigests}}|{{.Id}}|{{.Created}} python:3.12-slim
+    exit=0 durata_ms=67
+[2026-11-24T11:19:27.057+00:00] $ docker compose -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml stop -t 5
+    exit=0 durata_ms=618
+    stderr: Container lab_sdk_dns_rebinding_corretta-cattura-1 Stopping 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Stopped 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Stopping 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Stopped
+[2026-11-24T11:19:27.676+00:00] $ docker compose --profile * -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml logs --timestamps --no-color
+    exit=0 durata_ms=141
+[2026-11-24T11:19:27.818+00:00] $ docker compose --profile * -p lab_sdk_dns_rebinding_corretta -f .\scenarios\sdk_dns_rebinding\compose.yml down -v --remove-orphans
+    exit=0 durata_ms=411
+    stderr: Container lab_sdk_dns_rebinding_corretta-cattura-1 Stopping 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Stopped 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Removing 
+             Container lab_sdk_dns_rebinding_corretta-cattura-1 Removed 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Stopping 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Stopped 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Removing 
+             Container lab_sdk_dns_rebinding_corretta-target-1 Removed 
+             Network lab_sdk_dns_rebinding_corretta_lab Removing 
+             Network lab_sdk_dns_rebinding_corretta_lab Removed
