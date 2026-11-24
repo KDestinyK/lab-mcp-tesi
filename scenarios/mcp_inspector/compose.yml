@@ -1,0 +1,44 @@
+services:
+  target:
+    build:
+      context: .
+      args:
+        INSPECTOR_VERSION: ${INSPECTOR_VERSION:?manca INSPECTOR_VERSION}
+    image: lab-mcp-inspector:${INSPECTOR_VERSION}
+    pull_policy: build
+    networks: [lab]
+    volumes:
+      - condiviso:/condiviso
+    healthcheck:
+      test: ["CMD", "node", "/app/salute.js"]
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  cattura:
+    image: nicolaka/netshoot:v0.13
+    network_mode: "service:target"
+    cap_add: [NET_ADMIN, NET_RAW]
+    command: ["sh", "-c", "exec tcpdump -i ${CATTURA_INTERFACCIA:-lo} -U -w /captures/traffico-$$(date -u +%Y%m%dT%H%M%SZ).pcap"]
+    volumes:
+      - type: bind  # sintassi estesa per i percorsi Windows (C:/...)
+        source: ${CAPTURE_DIR:-./pcap}
+        target: /captures
+    depends_on:
+      target:
+        condition: service_healthy
+
+  client:
+    image: lab-mcp-inspector:${INSPECTOR_VERSION}
+    pull_policy: never
+    network_mode: "service:target"
+    volumes:
+      - condiviso:/condiviso
+    profiles: ["sonda"]
+
+networks:
+  lab:
+    internal: true
+
+volumes:
+  condiviso:
